@@ -7,26 +7,26 @@ This guide is intended to help API designers and developers evaluate alternative
 ##Challenges
 Consider the following security challenges when designing and implementing a service API:
 
-- Principals, such as users or devices, must be authenticated by a trusted identity provider in order to determine who is accessing the service. For more information, see the section on [Authentication](#insertlink#).
-- Actions taken by users and access to resources must be authorized based on the user’s authenticated identity and the role membership, permissions, policies or other related information about that user. For more information, see the section on [Authorization](#insertlink#).
+- Principals, such as users or devices, must be authenticated by a trusted identity provider in order to determine who is accessing the service. For more information, see the section on “<a href="#authentication" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Authentication</a>”.
+- Actions taken by users and access to resources must be authorized based on the user’s authenticated identity and the role membership, permissions, policies or other related information about that user. For more information, see the section on “<a href="#authorization" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Authorization</a>”.
 - Services must also be hardened to protect against unauthorized and malicious usage. Examples include:
 	- Protect data crossing the network and data in storage from interception and tampering, and from non-authorized users being able to see the contents.
 	- Maximize protection against a range of threats including cross-site request forgery and cross-origin resource sharing.
 	- Maintain audit logs in order to counter repudiation challenges.
 	- Monitor API usage and detect non-standard usage patterns.
-	- Implement IP restrictions and rate limits on API usage. For more information, see the section on [Threat mitigation](#insertlink#).
-## Authentication
+	- Implement IP restrictions and rate limits on API usage. For more information, see the section on “<a href="#threatmitigation" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Threat mitigation</a>”.
+## <a name="authentication" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Authentication
 There are several mechanisms for authentication, with a major trade-off between them being the strength of the security against the simplicity of use. For example, some use a pre-configured key whereas others use certificates or tokens to provide a more flexible and robust security mechanism. Choosing the appropriate mechanism requires consideration for the size of the user community (for example, is authentication limited to a small number of consumers or a large number of public consumers); the way that client identity is determined (such as a corporate directory, a token service, or a social identity provider); and the business requirements such as administration (managing keys and secrets), the benefits it provides for API consumers, and other related factors.
 
 This section contains guidelines and considerations for the following authentication mechanisms:
 
-- [HMAC authentication](#insertlink#)
-- [Basic authentication](#insertlink#)
-- [Certificate authentication](#insertlink#)
-- [Digest authentication](#insertlink#)
-- [Token based authentication](#insertlink#)
+- “<a href="#HMACauthentication" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">HMAC authentication</a>”
+- “<a href="#Basicauthentication" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Basic authentication</a>”
+- “<a href="#Certificateauthentication" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Certificate authentication</a>”
+- “<a href="#Basicauthentication" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Digest authentication</a>”
+- “<a href="#Tokenbasedauthentication" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Token based authentication</a>”
 
-## HMAC authentication
+## <a name="HMACauthentication" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> HMAC authentication
 Hash-based message authentication code (HMAC) is a mechanism for calculating a hash code using a cryptographic hash algorithm provider. It uses a combination of the message verb, headers and values, and a secret key that is known only to both the parties involved. The sender and the receiver generate the hash code. The result is a proof of integrity, and authenticity of the payload.
 
 More information about HMAC authentication is available at [HMAC: Keyed-Hashing for Message Authentication](http://www.ietf.org/rfc/rfc2104.txt).
@@ -49,9 +49,9 @@ Consider the following when using HMAC authentication:
 	- It does not provide mechanisms for repudiation of critical business transactions, unless you are implementing a web API, because no identity can be attached to the request.
 	- The key distribution policy for clients to obtain the key is difficult to implement in a secure way.
 
-For an example of implementing HMAC authentication, see the section below on [OWIN middleware example - applying HMAC authentication](#insertlink#).
+For an example of implementing HMAC authentication, see the section below on “<a href="#applyingHMACauthentication" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">OWIN middleware example - applying HMAC authentication</a>”.
 
-## Basic and Digest authentication
+## <a name="Basicauthentication" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Basic and Digest authentication
 In the basic authentication scheme, a user name and password are sent in an authorization header from the client to the server, and are used to authenticate the caller. The authentication logic then authenticates the user against a store containing user names, passwords, and (optionally) user profiles.
 
 In the digest authentication scheme, a digest that is computed as a hash using an MD5 cryptographic algorithm is sent instead of a user name and password. The algorithm can use any combination of the username, password, and the target resource URI. Digest authentication works by comparing the hashes produced by the client with those in an authentication store, which were generated using an identical cryptographic process.
@@ -98,7 +98,7 @@ client.BaseAddress = new Uri("https://localhost");
 var response = client.GetAsync("api/values").Result;
 ```
 
-## Certificate authentication
+## <a name="Certificate authentication" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Certificate authentication
 Using a certificate to authenticate a client can support a high security scenario. The client stores a certificate that it presents to the server to enable authentication. This approach supports a two factor authentication mechanism because the client will usually need to provide a PIN in order to use the certificate.
 
 ### Considerations for Certificate authentication
@@ -112,7 +112,7 @@ Consider the following when using certificate authentication:
 	- Certificate distribution is a difficult task to achieve in distributed environments where there are many clients.
 	- Certificate revocation and time synchronization issues.
 
-## Token based authentication
+## <a name="Tokenbasedauthentication" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Token based authentication
 Token based authentication is considered to be the most flexible form of authentication, and it separates the authentication infrastructure from the application business logic. This separation of concerns creates an abstraction level very different from traditional enterprise or username/password authentication techniques. Token based authentication offloads authentication to an external entity, which acts as an identity provider and a trusted authority that issues security tokens. The application and the identity provider can be different business entities who establish a relationship of trust.
 
 Increasingly, the actors in complex authentication scenarios are client application entities—as well as the traditional user entity—which creates a level of complexity that cannot easily be managed with other traditional authentication schemes. Token based authentication makes it much easier to handle these types of scenarios.
@@ -160,7 +160,7 @@ Consider the following points related to choosing token types:
 - SWT is an attempt to simplify SAML tokens, but they only support symmetric signatures and so require considerable computational resources to process.
 - SAML tokens are well suited to use with token issuers based on WS-Trust and WS-Federation. Examples are Active Directory Federation Services (ADFS) and other issuers that provide cross domain security federation or on-premises integration.
 
-# Authorization
+# <a name="authorization" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Authorization
 Authorization is the process of deciding if an entity can access a specific resource or perform a specific action. It occurs after the user authenticates. Authorization can be based on the user identity or the client application identity, using data from the claims in a security token or user profile data stored in a profile store.
 
 Token claims can come from different sources such as simple authentication tokens (username and password), Windows tokens with role membership information, certificates, or from more advanced issuers such as identity providers and authorization servers.
@@ -181,7 +181,7 @@ Consider the following points related to authorization:
 
 For examples of authorization, see
 
-- [Authorization example](#insertlink#)
+- <a name="applyingHMACauthentication" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Authorization example
 - [Authentication filters](#insertlink#)
 
 ## OAuth 2.0 authorization protocol
@@ -211,12 +211,12 @@ Consider the following when using the OAuth authorization protocol:
 ## Authorization flows
 This section contains information about the different flows for authentication and authorization:
 
-- [Resource flow](#insertlink#). Users trust the client application and provide it with their credentials. The client application sends these credentials to the authorization server when access to a protected resource is required. The authorization server returns an access token for the protected resource to the client application, which sends this token to the API.
-- [Resource flow without credentials on the client](#insertlink#). Users do not trust the client application with their credentials. Users are redirected to the authorization server when access to a protected resource is required, and they provide credentials at this stage. The authorization server returns an access token for the protected resource to the client application, which sends the token to the API.
-- [Server authorization code flow](#insertlink#). Users of a server-based application such as an ASP.NET website do not trust the server-based application with their credentials, but they need to provide the server-based application with proof of permission to access a protected resource. Users access the authorization server and they provide their credentials to obtain an access code (not a security token). Users present this code to the server-based application, which uses it to obtain a security token that it presents it to the protected resource when access is required. The protected resource accesses the authorization server to validate the token. If the server-based application does not present a valid token, the authorization server prompts the user to provide credentials at this stage.
-- [Cross domain trust flow](#insertlink#). The protected resource is in a different security domain to the client application. Users trust the client application and provide it with their credentials. The client application sends these credentials to the authorization server in its own domain when access to a protected resource is required, and this authorization server returns an access token for the protected resource to the client application because it trusts the client application’s authorization server. The client application then presents this token to the authentication server in the domain of the protected resource, which sends a new token back to the client application. The client application uses the new token to access the protected resource.
+- “<a href="#Resourceflow" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Resource flow</a>”. Users trust the client application and provide it with their credentials. The client application sends these credentials to the authorization server when access to a protected resource is required. The authorization server returns an access token for the protected resource to the client application, which sends this token to the API.
+- “<a href="#Resourceflowwithoutcredentialsontheclient" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Resource flow without credentials on the client </a>”. Users do not trust the client application with their credentials. Users are redirected to the authorization server when access to a protected resource is required, and they provide credentials at this stage. The authorization server returns an access token for the protected resource to the client application, which sends the token to the API.
+- “<a href="#Serverauthorizationcodeflow" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Server authorization code flow</a>”. Users of a server-based application such as an ASP.NET website do not trust the server-based application with their credentials, but they need to provide the server-based application with proof of permission to access a protected resource. Users access the authorization server and they provide their credentials to obtain an access code (not a security token). Users present this code to the server-based application, which uses it to obtain a security token that it presents it to the protected resource when access is required. The protected resource accesses the authorization server to validate the token. If the server-based application does not present a valid token, the authorization server prompts the user to provide credentials at this stage.
+- “<a href="#Crossdomaintrustflow" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Cross domain trust flow</a>”. The protected resource is in a different security domain to the client application. Users trust the client application and provide it with their credentials. The client application sends these credentials to the authorization server in its own domain when access to a protected resource is required, and this authorization server returns an access token for the protected resource to the client application because it trusts the client application’s authorization server. The client application then presents this token to the authentication server in the domain of the protected resource, which sends a new token back to the client application. The client application uses the new token to access the protected resource.
 
-### Resource flow
+### <a name="Resourceflow" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Resource flow
 The following schematic shows the resource flow model, where the users trust the client application with credentials.
 
 [insert graphic](#insertgraphic#)
@@ -230,7 +230,7 @@ The steps of the resource flow model are:
 5.	The protected resource authorizes the user based on the user’s identity (using claims and roles), the client type, and the required scope.
 6.	The client application can refresh the token without user interaction if required, and if the access policy for the protected resource process allows this.
 
-### Resource flow without credentials on the client
+### <a name="Resourceflowwithoutcredentialsontheclient" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Resource flow without credentials on the client
 The following schematic shows the resource flow without credentials on the client model, where the users do not trust the client application with their credentials.
 
 [insert graphic](#insertgraphic#)
@@ -246,7 +246,7 @@ The steps of the resource flow without credentials on the client model are:
 
 Consent pages on the authorization server are specific to the application logic. Developers building authorization servers must implement a UI that prompts the user for the type of consent required. It could be data such as a birth date or last name, or an action such as read or print. The consent may also include the duration for which it is valid, and other information.
 
-### Server authorization code flow
+### <a name="Serverauthorizationcodeflow" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Server authorization code flow
 The following schematic shows the server authorization code flow model, which is typically used when the application that accesses a protected resource is running on the server (rather than as a local client application).
 
 [insert graphic](#insertgraphic#)
@@ -262,7 +262,7 @@ The steps of the server authorization code flow model are:
 7.	The protected resource authorizes the user based on the user’s identity using claims, roles, the client type, and/or the scope.
 8.	The server-based application can refresh the token without user interaction if required, and if the access policy for the protected resource process allows this. 
 
-### Cross domain trust flow
+### <a name="Crossdomaintrustflow" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Cross domain trust flow
 The following schematic shows the cross domain trust flow model, which can be used when the protected resource is in a different security domain to the client application.
 
 [insert graphic](#insertgraphic#)
@@ -360,17 +360,17 @@ Another approach is to implement imperative checks at the action level inside th
 return Unauthorized(new AuthenticationHeaderValue("Bearer","unauthorized");
 ```
 
-# Threat mitigation
+# <a name="threatmitigation" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Threat mitigation
 
 This section contains guidelines and considerations for the following topics:
 
-- [Information disclosure](#insertlink#)
-- [Cross-site request forgery attacks](#insertlink#)
-- [Cross-origin resource sharing attacks](#insertlink#)
-- [Repudiation](#insertlink#)
-- [Data validation](#insertlink#)
+- “<a href="#Informationdisclosure" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Information disclosure</a>”
+- “<a href="#Crosssiterequestforgeryattacks" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Cross-site request forgery attacks</a>”
+- “<a href="#Crossoriginresourcesharingattacks" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Cross-origin resource sharing attacks</a>”
+- “<a href="#Repudiation" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Repudiation</a>”
+- “<a href="#Datavalidation" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">Data validation</a>”
 
-## Information disclosure
+## <a name="Informationdisclosure" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Information disclosure
 Information disclosure occurs when data that is in transit or at rest in storage is visible or accessed by non-valid or malicious users or processes. Preventing information disclosure is especially important for sensitive data.
 
 ### Considerations for information disclosure
@@ -434,7 +434,7 @@ public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 }
 ```
 
-## Cross-site request forgery attacks
+## <a name="Crosssiterequestforgeryattacks" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Cross-site request forgery attacks
 This well-known attack relies on the user visiting a legitimate site and being authenticated, then visiting a malicious site while the browser still contains the authentication credentials or cookie. Either a form or client-side code running in the browser executes a post back to the malicious site, which includes the authentication credentials. A form can have hidden fields, but can lure the user into thinking there was no malicious intention—as shown here:
 <h1>You Are a Winner!</h1>
 <form action="http://mywebapi.com/api/payment" method="post">
@@ -489,7 +489,7 @@ app.UseCookieAuthentication(new CookieAuthenticationOptions
 
 For more information, see [Preventing Cross-Site Request Forgery (CSRF) Attacks](http://www.asp.net/web-api/overview/security/preventing-cross-site-request-forgery-(csrf)-attacks).
 
-## Cross-origin resource sharing attacks
+## <a name="Crossoriginresourcesharingattacks" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Cross-origin resource sharing attacks
 A web application viewed in a web browser might use client-side code to access resources from an API exposed by a web service in a different domain. This is a cross-origin request, and occurs when the web application and the web service have different schemes, hosts, or ports. The web application may be prevented from performing a cross-origin request for security purposes—this mechanism prevents a web application served by one web server from silently redirecting a request to a third-party web service, and returning a potentially malicious response.
 
 CORS is a W3SC standard protocol (see [Cross-Origin Resource Sharing](http://www.w3.org/tr/cors/)) that enables a web server to selectively relax the cross-origin security restriction. When a web application sends an HTTP request to the web service, it can include an Origin header that specifies the domain of the server hosting the web application as part of the request:
@@ -556,7 +556,7 @@ public void Post([FromBody]string value)
 
 - Consider using the classes in the Microsoft.Owin.Cors namespace and handling CORS concerns in your OWIN middleware. This moves CORS handling code out of the API. The disadvantage with this approach is that you lose the ability to assert granular control over actions. For more information, see [CORS Support in ASP.NET Web API 2](http://msdn.microsoft.com/en-us/dn532203.aspx).
 
-## Repudiation
+## <a name="Repudiation" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Repudiation
 Repudiation is an attempt by a user or a business entity to deny or challenge a claim that a specific action took place. For example, a user may deny executing a specific business process. It is vital to maintain logs of all significant actions that are executed by users or by other applications in order to provide evidence in the case of repudiation.
 
 ### Considerations for repudiation
@@ -567,7 +567,7 @@ Consider the following points related to repudiation:
 - Log the identity of the user for all failed business transactions.
 - You can retrieve the identity of use in an API from **ClaimsPrincipal.Current.Identities**.
 
-## Data validation
+## <a name="Datavalidation" href="#" xmlns:xlink=http://www.w3.org/1999/xlink><span /></a> Data validation
 Data validation includes checking all data at every level or boundary to ensure both security and reliability of applications. Invalid data can cause information loss, data corruption, and can prevent applications from performing correctly. Malicious attacks often make use of specially crafted invalid data inputs to cause system errors or information disclosure.
 
 ### Considerations for data validation
