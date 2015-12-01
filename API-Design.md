@@ -1,3 +1,26 @@
+<properties
+   pageTitle="API design guidance | Microsoft Azure"
+   description="Guidance upon how to create a well designed API."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="rest-api"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="04/28/2015"
+   ms.author="masashin"/>
+   
+ <mspnp
+  file.name="best-practices-api-design"
+  publish="true"/>
+
 ![](http://pnp.azurewebsites.net/images/pnp-logo.png)
 
 # API design guidance

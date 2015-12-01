@@ -1,3 +1,26 @@
+<properties
+   pageTitle="Retry service specific guidance | Microsoft Azure"
+   description="Service specific guidance for setting the retry mechanism."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="na"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="04/28/2015"
+   ms.author="masashin"/>
+
+<mspnp
+  file.name="best-practices-retry-service-specific"
+  publish="true"/>
+  
 ![](http://pnp.azurewebsites.net/images/pnp-logo.png)
 
 # Retry service specific guidance

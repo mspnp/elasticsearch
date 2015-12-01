@@ -1,3 +1,26 @@
+<properties
+   pageTitle="NuGet Packages | Microsoft Azure"
+   description="Guidance on NuGet Packages for general retry policy work."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="na"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="04/09/2015"
+   ms.author="masashin"/>
+
+<mspnp
+  file.name="best-practices-retry-policies"
+  publish="true"/>
+
 <p class="lead">As more components begin to communicate, transient failures become 
 more important to smartly handle. The Transient Fault Handling work handled by the 
 retry policies NuGet package can help handle retries within a single instance.</p>

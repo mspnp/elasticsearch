@@ -1,3 +1,26 @@
+<properties
+   pageTitle="Monitoring and diagnostics guidance | Microsoft Azure"
+   description="Best practices for monitoring distributed applications in the cloud."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="na"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="04/28/2015"
+   ms.author="masashin"/>
+
+<mspnp
+  file.name="best-practices-monitoring"
+  publish="true"/>
+  
 ![](http://pnp.azurewebsites.net/images/pnp-logo.png)
 
 # Monitoring and diagnostics guidance

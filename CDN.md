@@ -1,3 +1,26 @@
+<properties
+   pageTitle="Content Delivery Network (CDN) guidance | Microsoft Azure"
+   description="Guidance on Content Delivery Network (CDN) to deliver high bandwidth content hosted in Azure."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="na"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="04/28/2015"
+   ms.author="masashin"/>
+
+<mspnp
+  file.name="best-practices-cdn"
+  publish="true"/>
+  
 ![](http://pnp.azurewebsites.net/images/pnp-logo.png)
 
 # Content Delivery Network (CDN) guidance

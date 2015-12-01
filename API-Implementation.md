@@ -1,3 +1,25 @@
+<properties
+   pageTitle="API implementation guidance | Microsoft Azure"
+   description="Guidance upon how to implement an API."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="rest-api"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="05/13/2015"
+   ms.author="masashin"/>
+   
+<mspnp
+  file.name="best-practices-api-implementation"
+  publish="true"/>
 
 ![](http://pnp.azurewebsites.net/images/pnp-logo.png)
 

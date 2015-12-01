@@ -1,3 +1,26 @@
+<properties
+   pageTitle="Data partitioning guidance | Microsoft Azure"
+   description="Guidance upon how to separate partitions to be managed and accessed separately."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="na"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="04/28/2015"
+   ms.author="masashin"/>
+   
+<mspnp
+  file.name="best-practices-data-partitioning"
+  publish="true"/>
+  
 ![](http://pnp.azurewebsites.net/images/pnp-logo.png)
 
 # Data partitioning guidance

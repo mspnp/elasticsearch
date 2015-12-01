@@ -1,4 +1,28 @@
+<properties
+   pageTitle="API security guidance | Microsoft Azure"
+   description="Guidance upon how to secure an API."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="rest-api"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date=""
+   ms.author="masashin"/>
+   
+<mspnp
+  file.name="best-practices-api-security"
+  publish="false"/>
+  
 #API security guidance
+
 #Overview
 It is vital to design and implement services that expose an API over the Internet in a secure way to protect the service and the users from a range of threats. This guide is meant to serve as a companion to the other guides on API design. This guide cover methods of authentication and authorization to protect your API from unauthorized access as well as API design consideration such as token types, authorization protocols, authorization flows and threat mitigation.
 

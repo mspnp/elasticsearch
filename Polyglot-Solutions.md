@@ -1,3 +1,26 @@
+<properties
+   pageTitle="Polyglot data store guidance | Microsoft Azure"
+   description="Assessing Data Store Capabilities for Polyglot Solutions."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="na"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date=""
+   ms.author="masashin"/>
+   
+<mspnp
+  file.name="best-practices-polyglot-solutions"
+  publish="true"/>
+
 # Assessing Data Store Capabilities for Polyglot Solutions
 
 ## Overview
