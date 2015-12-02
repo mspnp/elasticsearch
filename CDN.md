@@ -53,7 +53,7 @@ You can also use the CDN as a cache for serving dynamic content, such as a PDF r
 
 The major advantages of using the CDN are lower latency and faster delivery of content to users irrespective of their geographical location in relation to the datacenter where the application is hosted.
 
-![](figures/CDN/CDN.png)
+![](media/best-practices-cdn/CDN.png)
 
 Using the CDN should also help to reduce the load on on application because it is relieved of the processing required to access and deliver the content. This reduction in load can help to increase the performance and scalability of the application, as well as minimizing hosting costs by reducing the processing resources required to achieve a specific level of performance and availability.
 

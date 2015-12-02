@@ -289,7 +289,7 @@ For more information, see [Code-Based Configuration (EF6 onwards)](http://msdn.m
 
 The following table shows the default settings for the built-in retry policy when using EF6.
 
-![](figures/RetryServiceSpecific/RetryServiceSpecificGuidanceTable4.png)
+![](media/best-practices-retry-service-specific/RetryServiceSpecificGuidanceTable4.png)
 ## Retry usage guidance
 
 Consider the following guidelines when accessing SQL Database using EF6:
@@ -551,7 +551,7 @@ client.RetryPolicy = new RetryExponential(minBackoff: TimeSpan.FromSeconds(0.1),
 The retry policy cannot be set at the individual operation level. It applies to all operations for the messaging client.
 The following table shows the default settings for the built-in retry policy.
 
-![](figures/RetryServiceSpecific/RetryServiceSpecificGuidanceTable7.png)
+![](media/best-practices-retry-service-specific/RetryServiceSpecificGuidanceTable7.png)
 
 ## Retry usage guidance
 
@@ -563,7 +563,7 @@ Consider the following guidelines when using Service Bus:
 Consider starting with following settings for retrying operations. These are general purpose settings, and you should monitor the operations and fine tune the values to suit your own scenario.
 
 
-![](figures/RetryServiceSpecific/RetryServiceSpecificGuidanceTable8.png)
+![](media/best-practices-retry-service-specific/RetryServiceSpecificGuidanceTable8.png)
 
 ## Telemetry
 
