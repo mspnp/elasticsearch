@@ -21,11 +21,7 @@
   file.name="best-practices-api-implementation"
   publish="true"/>
 
-![](http://pnp.azurewebsites.net/images/pnp-logo.png)
-
 # API implementation guidance
-
-Some topics in this guidance are under discussion and may change in the future. We welcome your feedback!
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -52,11 +48,14 @@ Some topics in this guidance are under discussion and may change in the future. 
 - [More information](#more-information)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+![](media/best-practices-api-implementation/pnp-logo.png)
 
-# Overview
+Some topics in this guidance are under discussion and may change in the future. We welcome your feedback!
+
+## Overview
 A carefully-designed RESTful web API defines the resources, relationships, and navigation schemes that are accessible to client applications. When you implement and deploy a web API, you should consider the physical requirements of the environment hosting the web API and the way in which the web API is constructed rather than the logical structure of the data. This guidance focusses on best practices for implementing a web API and publishing it to make it available to client applications. Security concerns are described separately in the API Security Guidance document. You can find detailed information about web API design in the API Design Guidance document.
 
-# Considerations for implementing a RESTful web API
+## Considerations for implementing a RESTful web API
 The following sections illustrate best practice for using the ASP.NET Web API template to build a RESTful web API. For detailed information on using the Web API template, visit the [Learn About ASP.NET Web API](http://www.asp.net/web-api) page on the Microsoft website.
 
 ## Considerations for implementing request routing
@@ -469,7 +468,7 @@ In a distributed environment such as that involving a web server and client appl
 	```
 
 	This code makes use of a custom `IHttpActionResult` class named `OkResultWithCaching`. This class enables the controller to set the cache header contents:
-	
+
 	```C#
 	public class OkResultWithCaching<T> : OkNegotiatedContentResult<T>
     {
@@ -604,7 +603,7 @@ In a distributed environment such as that involving a web server and client appl
 
                 // Retrieve the If-None-Match header from the request (if it exists)
                 var nonMatchEtags = Request.Headers.IfNoneMatch;
-                
+
                 // If there is an ETag in the If-None-Match header and
                 // this ETag matches that of the order just retrieved,
                 // then create a Not Modified response message
@@ -707,12 +706,12 @@ In a distributed environment such as that involving a web server and client appl
                     return NotFound();
                 }
 
-                var hashedOrder = orderToUpdate.GetHashCode(); 
+                var hashedOrder = orderToUpdate.GetHashCode();
                 string hashedOrderEtag = String.Format("\"{0}\"", hashedOrder);
-       
+
                 // Retrieve the If-Match header from the request (if it exists)
                 var matchEtags = Request.Headers.IfMatch;
-                
+
                 // If there is an Etag in the If-Match header and
                 // this etag matches that of the order just retrieved,
                 // or if there is no etag, then update the Order
@@ -720,11 +719,11 @@ In a distributed environment such as that involving a web server and client appl
                      String.Compare(matchEtags.First().Tag, hashedOrderEtag) == 0)) ||
                      matchEtags.Count == 0)
                 {
-                    // Modify the order 
+                    // Modify the order
                     orderToUpdate.OrderValue = order.OrderValue;
                     orderToUpdate.ProductID = order.ProductID;
                     orderToUpdate.Quantity = order.Quantity;
-                    
+
                     // Save the order back to the data store
                     // ...
 
@@ -736,7 +735,7 @@ In a distributed environment such as that involving a web server and client appl
                     hashedOrder = order.GetHashCode();
                     hashedOrderEtag = String.Format("\"{0}\"", hashedOrder);
                     var eTag = new EntityTagHeaderValue(hashedOrderEtag);
-                    
+
                     var location = new Uri(string.Format("{0}/{1}/{2}", baseUri, Constants.ORDERS, id));
                     var response = new EmptyResultWithCaching()
                     {
@@ -745,10 +744,10 @@ In a distributed environment such as that involving a web server and client appl
                         ETag = eTag,
                         Location = location
                     };
-                    
+
                     return response;
-                }        
-                
+                }
+
                 // Otherwise return a Precondition Failed response
                 return StatusCode(HttpStatusCode.PreconditionFailed);
             }
@@ -772,7 +771,7 @@ There may be occasions when a client application needs to issue requests that se
 
 	Some resources may be large objects or include large fields, such as graphics images or other types of binary data. A web API should support streaming to enable optimized uploading and downloading of these resources.
 
-	The HTTP protocol provides the chunked transfer encoding mechanism to stream large data objects back to a client. When the client sends an HTTP GET request for a large object, the web API can send the reply back in piecemeal _chunks_ over an HTTP connection. The length of the data in the reply may not be known initially (it might be generated), so the server hosting the web API should send a response message with each chunk that specifies the Transfer-Encoding: Chunked header rather than a Content-Length header. The client application can receive each chunk in turn to build up the complete response. The data transfer completes when the server sends back a final chunk with zero size.	You can implement chunking in the ASP.NET Web API by using the `PushStreamContent` class. 
+	The HTTP protocol provides the chunked transfer encoding mechanism to stream large data objects back to a client. When the client sends an HTTP GET request for a large object, the web API can send the reply back in piecemeal _chunks_ over an HTTP connection. The length of the data in the reply may not be known initially (it might be generated), so the server hosting the web API should send a response message with each chunk that specifies the Transfer-Encoding: Chunked header rather than a Content-Length header. The client application can receive each chunk in turn to build up the complete response. The data transfer completes when the server sends back a final chunk with zero size.	You can implement chunking in the ASP.NET Web API by using the `PushStreamContent` class.
 
 	The following example shows an operation that responds to HTTP GET requests for product images:
 
@@ -861,7 +860,7 @@ There may be occasions when a client application needs to issue requests that se
                 }
                 else
                 {
-                    var id = new Random().Next(); // Use a random int as the key for the new resource. Should probably check that this key has not already been used 
+                    var id = new Random().Next(); // Use a random int as the key for the new resource. Should probably check that this key has not already been used
                     var container = ConnectToBlobContainer(Constants.PRODUCTIMAGESCONTAINERNAME);
                     return new FileUploadResult()
                     {
@@ -966,7 +965,7 @@ The same web API might be utilized by many client applications running anywhere 
 
 	A request that might take a long time to process should be performed without blocking the client that submitted the request. The web API can perform some initial checking to validate the request, initiate a separate task to perform the work, and then return a response message with HTTP code 202 (Accepted). The task could run asynchronously as part of the web API processing, or it could be offloaded to an Azure WebJob (if the web API is hosted by an Azure Website) or a worker role (if the web API is implemented as an Azure cloud service).
 
-	> **Note**: For more information about using WebJobs with Azure Website, visit the page [Use WebJobs to run background tasks in Microsoft Azure Websites](http://azure.microsoft.com/en-us/documentation/articles/web-sites-create-web-jobs/) on the Microsoft website.
+	> **Note**: For more information about using WebJobs with Azure Website, visit the page [Use WebJobs to run background tasks in Microsoft Azure Websites](web-sites-create-web-jobs.md) on the Microsoft website.
 
 	The web API should also provide a mechanism to return the results of the processing to the client application. You can achieve this by providing a polling mechanism for client applications to periodically query whether the processing has finished and obtain the result, or enabling the web API to send a notification when the operation has completed.
 
@@ -988,9 +987,9 @@ The same web API might be utilized by many client applications running anywhere 
 
 	If you prefer to implement notifications, the options available include:
 
-	- Using an Azure Notification Hub to push asynchronous responses to client applications. The page [Azure Notification Hubs Notify Users](http://azure.microsoft.com/en-us/documentation/articles/notification-hubs-aspnet-backend-windows-dotnet-notify-users/) on the Microsoft website provides further details.
+	- Using an Azure Notification Hub to push asynchronous responses to client applications. The page [Azure Notification Hubs Notify Users](notification-hubs-aspnet-backend-windows-dotnet-notify-users.md) on the Microsoft website provides further details.
 
-	- Using the Comet model to retain a persistent network connection between the client and the server hosting the web API, and using this connection to push messages from the server back to the client. The MSDN magazine article [Building a Simple Comet Application in the Microsoft .NET Framework](https://msdn.microsoft.com/en-us/magazine/jj891053.aspx) describes an example solution.
+	- Using the Comet model to retain a persistent network connection between the client and the server hosting the web API, and using this connection to push messages from the server back to the client. The MSDN magazine article [Building a Simple Comet Application in the Microsoft .NET Framework](https://msdn.microsoft.com/magazine/jj891053.aspx) describes an example solution.
 
 	- Using SignalR to push data in real-time from the web server to the client over a persistent network connection. SignalR is available for ASP.NET web applications as a NuGet package. You can find more information on the [ASP.NET SignalR](http://signalr.net/) website.
 
@@ -1058,7 +1057,7 @@ The nature of a web API brings its own additional requirements to verify that it
 
 Watch out for unexpected response status codes in the 5xx range. These messages are usually reported by the host server to indicate that it was unable to fulfil a valid request.
 
-- Test the different request header combinations that a client application can specify and ensure that the web API returns the expected information in response messages. 
+- Test the different request header combinations that a client application can specify and ensure that the web API returns the expected information in response messages.
 
 - Test query strings. If an operation can take optional parameters (such as pagination requests), test the different combinations and order of parameters.
 
@@ -1066,9 +1065,9 @@ Watch out for unexpected response status codes in the 5xx range. These messages 
 
 You should also create and run performance tests to check that the web API operates satisfactorily under duress. You can build a web performance and load test project by using Visual Studio Ultimate. For more information, see the page [Run performance tests on an application before a release](https://msdn.microsoft.com/library/dn250793.aspx) on the Microsoft website.
 
-# Publishing and managing a web API by using the Azure API Management Service
+## Publishing and managing a web API by using the Azure API Management Service
 
-Azure provides the [API Management Service](http://azure.microsoft.com/en-us/documentation/services/api-management/) which you can use to publish and manage a web API. Using this facility, you can generate a service that acts a façade for one or more web APIs. The service is itself a scalable web service that you can create and configure by using the Azure Management portal. You can use this service to publish and manage a web API as follows:
+Azure provides the [API Management Service](http://azure.microsoft.com/documentation/services/api-management/) which you can use to publish and manage a web API. Using this facility, you can generate a service that acts a façade for one or more web APIs. The service is itself a scalable web service that you can create and configure by using the Azure Management portal. You can use this service to publish and manage a web API as follows:
 
 1. Deploy the web API to a website, Azure cloud service, or Azure virtual machine.
 
@@ -1088,9 +1087,9 @@ Azure provides the [API Management Service](http://azure.microsoft.com/en-us/doc
 
 6.	Configure policies for each web API. Policies govern aspects such as whether cross-domain calls should be allowed, how to authenticate clients, whether to convert between XML and JSON data formats transparently, whether to restrict calls from a given IP range, usage quotas, and whether to limit the call rate. Policies can be applied globally across the entire product, for a single web API in a product, or for individual operations in a web API.
 
-You can find full details describing how to perform these tasks on the [API Management](http://azure.microsoft.com/en-us/services/api-management/) page on the Microsoft website. The Azure API Management Service also provides its own REST interface, enabling you to build a custom interface for simplifying the process of configuring a web API. For more information, visit the [Azure API Management REST API Reference](https://msdn.microsoft.com/library/azure/dn776326.aspx) page on the Microsoft website.
+You can find full details describing how to perform these tasks on the [API Management](http://azure.microsoft.com/services/api-management/) page on the Microsoft website. The Azure API Management Service also provides its own REST interface, enabling you to build a custom interface for simplifying the process of configuring a web API. For more information, visit the [Azure API Management REST API Reference](https://msdn.microsoft.com/library/azure/dn776326.aspx) page on the Microsoft website.
 
-> **Tip**: Azure provides the Azure Traffic Manager which enables you to implement failover and load-balancing, and reduce latency across multiple instances of a web site hosted in different geographic locations. You can use Azure Traffic Manager in conjunction with the API Management Service; the API Management Service can route requests to instances of a web site through Azure Traffic Manager.  For more information, visit the [About Traffic Manager Load Balancing Methods](https://msdn.microsoft.com/library/azure/dn339010.aspx) page on the Microsoft website.
+> **Tip**: Azure provides the Azure Traffic Manager which enables you to implement failover and load-balancing, and reduce latency across multiple instances of a web site hosted in different geographic locations. You can use Azure Traffic Manager in conjunction with the API Management Service; the API Management Service can route requests to instances of a web site through Azure Traffic Manager.  For more information, visit the [About Traffic Manager Load Balancing Methods](../traffic-manager/traffic-manager-load-balancing-methods.md) page on the Microsoft website.
 
 > In this structure, if you are using custom DNS names for your web sites, you should configure the appropriate CNAME record for each web site to point to the DNS name of the Azure Traffic Manager web site.
 
@@ -1140,7 +1139,7 @@ If you have implemented your web API by using the ASP.NET Web API template (eith
 
 You can view this data in real time from the Azure Management portal. You can also create webtests that monitor the health of the web API. A webtest sends a periodic request to a specified URI in the web API and captures the response. You can specify the definition of a successful response (such as HTTP status code 200), and if the request does not return this response you can arrange for an alert to be sent to an administrator. If necessary, the administrator can restart the server hosting the web API if it has failed.
 
-The [Application Insights - Start monitoring your app's health and usage](http://azure.microsoft.com/en-us/documentation/articles/app-insights-start-monitoring-app-health-usage/) page on the Microsoft website provides more information.
+The [Application Insights - Start monitoring your app's health and usage](app-insights-start-monitoring-app-health-usage/) page on the Microsoft website provides more information.
 
 ### Monitoring a web API through the API Management Service
 
@@ -1158,10 +1157,10 @@ You can use this information to determine whether a particular web API or operat
 
 > **Note**: You can change the details for a published product, and the changes are applied immediately. For example, you can add or remove an operation from a web API without requiring that you republish the product that contains the web API.
 
-# Related patterns
+## Related patterns
 - The [façade](http://en.wikipedia.org/wiki/Facade_pattern) pattern describes how to provide an interface to a web API.
 
-# More information
+## More information
 - The page [Learn About ASP.NET Web API](http://www.asp.net/web-api) on the Microsoft website provides a detailed introduction to building RESTful web services by using the Web API.
 - The page [Routing in ASP.NET Web API](http://www.asp.net/web-api/overview/web-api-routing-and-actions/routing-in-aspnet-web-api) on the Microsoft website describes how convention-based routing works in the ASP.NET Web API framework.
 - For more information on attribute-based routing, see the page [Attribute Routing in Web API 2](http://www.asp.net/web-api/overview/web-api-routing-and-actions/attribute-routing-in-web-api-2) on the Microsoft website.
@@ -1172,11 +1171,11 @@ You can use this information to determine whether a particular web API or operat
 - The [Status Code Definitions](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) page on the W3C website contains a full list of HTTP status codes and their descriptions.
 - For detailed information on handling HTTP exceptions with the ASP.NET Web API, visit the [Exception Handling in ASP.NET Web API](http://www.asp.net/web-api/overview/error-handling/exception-handling) page on the Microsoft website.
 - The article [Web API Global Error Handling](http://www.asp.net/web-api/overview/error-handling/web-api-global-error-handling) on the Microsoft website describes how to implement a global error handling and logging strategy for a web API.
-- The page [Use WebJobs to run background tasks in Microsoft Azure Websites](http://azure.microsoft.com/en-us/documentation/articles/web-sites-create-web-jobs/) on the Microsoft website provides information and examples on using WebJobs to perform background operations on an Azure Website.
-- The page [Azure Notification Hubs Notify Users](http://azure.microsoft.com/en-us/documentation/articles/notification-hubs-aspnet-backend-windows-dotnet-notify-users/) on the Microsoft website shows how you can use an Azure Notification Hub to push asynchronous responses to client applications.
-- The [API Management](http://azure.microsoft.com/en-us/services/api-management/) page on the Microsoft website describes how to publish a product that provides controlled and secure access to a web API.
+- The page [Use WebJobs to run background tasks in Microsoft Azure Websites](web-sites-create-web-jobs.md) on the Microsoft website provides information and examples on using WebJobs to perform background operations on an Azure Website.
+- The page [Azure Notification Hubs Notify Users](notification-hubs-aspnet-backend-windows-dotnet-notify-users/) on the Microsoft website shows how you can use an Azure Notification Hub to push asynchronous responses to client applications.
+- The [API Management](http://azure.microsoft.com/services/api-management/) page on the Microsoft website describes how to publish a product that provides controlled and secure access to a web API.
 - The [Azure API Management REST API Reference](https://msdn.microsoft.com/library/azure/dn776326.aspx) page on the Microsoft website describes how to use the API Management REST API to build custom management applications.
-- The [About Traffic Manager Load Balancing Methods](https://msdn.microsoft.com/library/azure/dn339010.aspx) page on the Microsoft website summarizes how Azure Traffic Manager can be used to load-balance requests across multiple instances of a website hosting a web API.
-- The [Application Insights - Start monitoring your app's health and usage](http://azure.microsoft.com/en-us/documentation/articles/app-insights-start-monitoring-app-health-usage/) page on the Microsoft website provides detailed information on installing and configuring Application Insights in an ASP.NET Web API project.
+- The [About Traffic Manager Load Balancing Methods](../traffic-manager/traffic-manager-load-balancing-methods.md) page on the Microsoft website summarizes how Azure Traffic Manager can be used to load-balance requests across multiple instances of a website hosting a web API.
+- The [Application Insights - Start monitoring your app's health and usage](app-insights-start-monitoring-app-health-usage.md) page on the Microsoft website provides detailed information on installing and configuring Application Insights in an ASP.NET Web API project.
 - The page [Verifying Code by Using Unit Tests](https://msdn.microsoft.com/library/dd264975.aspx) on the Microsoft website provides detailed information on creating and managing unit tests by using Visual Studio.
 - The page [Run performance tests on an application before a release](https://msdn.microsoft.com/library/dn250793.aspx) on the Microsoft website describes how to use Visual Studio Ultimate to create a web performance and load test project.
