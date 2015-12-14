@@ -1,8 +1,28 @@
-![](http://pnp.azurewebsites.net/images/pnp-logo.png)
+<properties
+   pageTitle="API design guidance | Microsoft Azure"
+   description="Guidance upon how to create a well designed API."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="rest-api"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="04/28/2015"
+   ms.author="masashin"/>
+   
+ <mspnp
+  file.name="best-practices-api-design"
+  publish="true"/>
+
 
 # API design guidance
-
-Some topics in this guidance are under discussion and may change in the future. We welcome your feedback! 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -26,9 +46,12 @@ Some topics in this guidance are under discussion and may change in the future. 
   - [More information](#more-information)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+![](media/best-practices-api-design/pnp-logo.png)
 
+Some topics in this guidance are under discussion and may change in the future. We welcome your feedback!
 
 ## Overview
+
 Many modern web-based solutions make the use of web services, hosted by web servers, to provide functionality for remote client applications. The operations that a web service exposes constitute a web API. A well-designed web API should aim to support:
 
 - **Platform independence**. Client applications should be able to utilize the API that the web service provides without requiring how the data or operations that API exposes are physically implemented. This requires that the API abides by common standards that enable a client application and web service to agree on which data formats to use, and the structure of the data that is exchanged between client applications and the web service.
@@ -38,6 +61,7 @@ Many modern web-based solutions make the use of web services, hosted by web serv
 The purpose of this guidance is to describe the issues that you should consider when designing a web API.
 
 ## Introduction to Representational State Transfer (REST)
+
 In his dissertation in 2000, Roy Fielding proposed an alternative architectural approach to structuring the operations exposed by web services; REST. REST is an architectural style for building distributed systems based on hypermedia. A primary advantage of the REST model is that it is based on open standards and does not bind the implementation of the model or the client applications that access it to any specific implementation. For example, a REST web service could be implemented by using the Microsoft ASP.NET Web API, and client applications could be developed by using any language and toolset that can generate HTTP requests and parse HTTP responses.
 
 > **Note**: REST is actually independent of any underlying protocol and is not necessarily tied to HTTP. However, most common implementations of systems that are based on REST utilize HTTP as the application protocol for sending and receiving requests. This document focusses on mapping REST principles to systems designed to operate using HTTP.
@@ -108,7 +132,7 @@ In more complex systems there may be many more types of entity, and it can be te
 
 Another point to consider is that all web requests impose a load on the web server, and the greater the number of requests the bigger the load. You should attempt to define your resources to avoid “chatty” web APIs that expose a large number of small resources. Such an API may require a client application to submit multiple requests to find all the data that it requires. It may be beneficial to denormalize data and combine related information together into bigger resources that can be retrieved by issuing a single request. However, you need to balance this approach against the overhead of fetching data that might not be frequently required by the client. Retrieving large objects can increase the latency of a request and incur additional bandwidth costs for little advantage if the additional data is not often used.
 
-Avoid introducing dependencies between the web API to the structure, type, or location of the underlying data sources. For example, if your data is located in a relational database, the web API does not need to expose each table as a collection of resources. Think of the web API as an abstraction of the database, and if necessary introduce a mapping layer between the database and the web API. In this way, if the design or implementation of the database changes (for example, you move from a relational database containing a collection of normalized tables to a denormalized NoSQL storage system such as a document database) client applications are insulated from these changes. 
+Avoid introducing dependencies between the web API to the structure, type, or location of the underlying data sources. For example, if your data is located in a relational database, the web API does not need to expose each table as a collection of resources. Think of the web API as an abstraction of the database, and if necessary introduce a mapping layer between the database and the web API. In this way, if the design or implementation of the database changes (for example, you move from a relational database containing a collection of normalized tables to a denormalized NoSQL storage system such as a document database) client applications are insulated from these changes.
 > **Tip**: The source of the data that underpins a web API does not have to be a data store; it could be another service or line-of-business application or even a legacy application running on-premises within an organization.
 
 Finally, it might not be possible to map every operation implemented by a web API to a specific resource. You can handle such _non-resource_ scenarios through HTTP GET requests that invoke a piece of functionality and return the results as an HTTP response message. A web API that implements simple calculator-style operations such as add and subtract could provide URIs that expose these operations as pseudo resources and utilize the query string to specify the parameters required. For example a GET request to the URI _/add?operand1=99&operand2=1_ could return a response message with the body containing the value 100, and GET request to the URI _/subtract?operand1=50&operand2=20_ could return a response message with the body containing the value 30. However, only use these forms of URIs sparingly.
@@ -137,7 +161,7 @@ The effect of a specific request should depend on whether the resource to which 
 
 The purpose of GET and DELETE requests are relatively straightforward, but there is scope for confusion concerning the purpose and effects of POST and PUT requests.
 
-A POST request should create a new resource with data provided in the body of the request. In the REST model, you frequently apply POST requests to resources that are collections; the new resource is added to the collection. 
+A POST request should create a new resource with data provided in the body of the request. In the REST model, you frequently apply POST requests to resources that are collections; the new resource is added to the collection.
 
 > **Note**: You can also define POST requests that trigger some functionality (and that don't necessarily return data), and these types of request can be applied to collections. For example you could use a POST request to pass a timesheet to a payroll processing service and get the calculated taxes back as a response.
 
@@ -287,6 +311,7 @@ You can extend this approach to limit (project) the fields returned if a single 
 > **Tip**: Give all optional parameters in query strings meaningful defaults. For example, set the `limit` parameter to 10 and the `offset` parameter to 0 if you implement pagination, set the sort parameter to the key of the resource if you implement ordering, and set the `fields` parameter to all fields in the resource if you support projections.
 
 ### Handling large binary resources
+
 A single resource may contain large binary fields, such as files or images. To overcome the transmission problems caused by unreliable and intermittent connections and to improve response times, consider providing operations that enable such resources to be retrieved in chunks by the client application. To do this, the web API should support the Accept-Ranges header for GET requests for large resources, and ideally implement HTTP HEAD requests for these resources. The Accept-Ranges header indicates that the GET operation supports partial results, and that a client application can submit GET requests that return a subset of a resource specified as a range of bytes. A HEAD request is similar to a GET request except that it only returns a header that describes the resource and an empty message body. A client application can issue a HEAD request to determine whether to fetch a resource by using partial GET requests. The following example shows a HEAD request that obtains information about a product image:
 
 ```HTTP
@@ -387,11 +412,13 @@ Content-Length: ...
 For this approach to be effective, client applications must be prepared to retrieve and parse this additional information.
 
 ## Versioning a RESTful web API
+
 It is highly unlikely that in all but the simplest of situations that a web API will remain static. As business requirements change new collections of resources may be added, the relationships between resources might change, and the structure of the data in resources might be amended. While updating a web API to handle new or differing requirements is a relatively straightforward process, you must consider the effects that such changes will have on client applications consuming the web API. The issue is that although the developer designing and implementing a web API has full control over that API, the developer does not have the same degree of control over client applications which may be built by third party organizations operating remotely. The primary imperative is to enable existing client applications to continue functioning unchanged while allowing new client applications to take advantage of new features and resources.
 
 Versioning enables a web API to indicate the features and resources that it exposes, and a client application can submit requests that are directed to a specific version of a feature or resource. The following sections describe several different approaches, each of which has its own benefits and trade-offs.
 
 ### No versioning
+
 This is the simplest approach, and may be acceptable for some internal APIs. Big changes could be represented as new resources or new links.  Adding content to existing resources might not present a breaking change as client applications that are not expecting to see this content will simply ignore it.
 
 For example, a request to the URI _http://adventure-works.com/customers/3_ should return the details of a single customer containing `Id`, `Name`, and `Address` fields expected by the client application:
@@ -421,6 +448,7 @@ Content-Length: ...
 Existing client applications might continue functioning correctly if they are capable of ignoring unrecognized fields, while new client applications can be designed to handle this new field. However, if more radical changes to the schema of resources occur (such as removing or renaming fields) or the relationships between resources change then these may constitute breaking changes that prevent existing client applications from functioning correctly. In these situations you should consider one of the following approaches.
 
 ### URI versioning
+
 Each time you modify the web API or change the schema of resources, you add a version number to the URI for each resource. The previously existing URIs should continue to operate as before, returning resources that conform to their original schema.
 
 Extending the previous example, if the `Address` field is restructured into sub-fields containing each constituent part of the address (such as `StreetAddress`, `City`, `State`, and `ZipCode`), this version of the resource could be exposed through a URI containing a version number, such as http://adventure-works.com/v2/customers/3:
@@ -437,6 +465,7 @@ Content-Length: ...
 This versioning mechanism is very simple but depends on the server routing the request to the appropriate endpoint. However, it can become unwieldy as the web API matures through several iterations and the server has to support a number of different versions. Also, from a purist’s point of view, in all cases the client applications are fetching the same data (customer 3), so the URI should not really be different depending on the version. This scheme also complicates implementation of HATEOAS as all links will need to include the version number in their URIs.
 
 ### Query string versioning
+
 Rather than providing multiple URIs, you can specify the version of the resource by using a parameter within the query string appended to the HTTP request, such as _http://adventure-works.com/customers/3?version=2_. The version parameter should default to a meaningful value such as 1 if it is omitted by older client applications.
 
 This approach has the semantic advantage that the same resource is always retrieved from the same URI, but it depends on the code that handles the request to parse the query string and send back the appropriate HTTP response. This approach also suffers from the same complications for implementing HATEOAS as the URI versioning mechanism.
@@ -444,6 +473,7 @@ This approach has the semantic advantage that the same resource is always retrie
 > **Note**: Some older web browsers and web proxies will not cache responses for requests that include a query string in the URL. This can have an adverse impact on performance for web applications that use a web API and that run from within such a web browser.
 
 ### Header versioning
+
 Rather than appending the version number as a query string parameter, you could implement a custom header that indicates the version of the resource. This approach requires that the client application adds the appropriate header to any requests, although the code handling the client request could use a default value (version 1) if the version header is omitted. The following examples utilize a custom header named _Custom-Header_. The value of this header indicates the version of web API.
 
 Version 1:
@@ -485,6 +515,7 @@ Content-Length: ...
 Note that as with the previous two approaches, implementing HATEOAS requires including the appropriate custom header in any links.
 
 ### Media type versioning
+
 When a client application sends an HTTP GET request to a web server it should stipulate the format of the content that it can handle by using an Accept header, as described earlier in this guidance. Frequently the purpose of the _Accept_ header is to allow the client application to specify whether the body of the response should be XML, JSON, or some other common format that the client can parse. However, it is possible to define custom media types that include information enabling the client application to indicate which version of a resource it is expecting. The following example shows a request that specifies an _Accept_ header with the value _application/vnd.adventure-works.v1+json_. The _vnd.adventure-works.v1_ element indicates to the web server that it should return version 1 of the resource, while the _json_ element specifies that the format of the response body should be JSON:
 
 ```HTTP
@@ -513,7 +544,7 @@ This approach is arguably the purest of the versioning mechanisms and lends itse
 
 > The Header versioning and Media Type versioning mechanisms typically require additional logic to examine the values in the custom header or the Accept header. In a large-scale environment, many clients using different versions of a web API can result in a significant amount of duplicated data in a server-side cache. This issue can become acute if a client application communicates with a web server through a proxy that implements caching, and that only forwards a request to the web server if it does not currently hold a copy of the requested data in its cache.
 
-# More information
+## More information
 
 - The [RESTful Cookbook](http://restcookbook.com/) contains an introduction to building RESTful APIs.
 - The Web [API Checklist](https://mathieu.fenniak.net/the-api-checklist/) contains a useful list of items to consider when designing and implementing a Web API.

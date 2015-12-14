@@ -1,3 +1,26 @@
+<properties
+   pageTitle="Polyglot data store guidance | Microsoft Azure"
+   description="Assessing Data Store Capabilities for Polyglot Solutions."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="na"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date=""
+   ms.author="masashin"/>
+   
+<mspnp
+  file.name="best-practices-polyglot-solutions"
+  publish="true"/>
+
 # Assessing Data Store Capabilities for Polyglot Solutions
 
 ## Overview
@@ -14,7 +37,7 @@ To help you select the data stores most likely to meet your requirements, we hav
 
 Relational databases are structured around the notion of organizing data as a series of two-dimensional tables comprising rows and columns.  Each table has its own set of columns, and every row in a table has the same set of columns. This model is mathematically based, and most vendors provide a dialect of the Structured Query Language (SQL) for retrieving and managing data. RDBMSs typically implement a transactionally consistent mechanism that conforms to the ACID (Atomic, Consistent, Isolated, Durable) model for updating information. These databases are very useful for constructing systems where absolute consistency is important, but the underlying structures do not lend themselves to scaling out by distributing storage and processing across machines. Additionally, much information has to be forced into a relational structure by following the normalization process in order to store it in an RDBMS. Normalization can help to reduce redundancy and the complexity of maintaining multiple copies of the same information. However, while this process is well understood, it can lead to time-consuming processing inefficiencies when storing data due to the frequent need to disassemble logical entities into rows in separate tables, and the converse process of reassembling this data when running queries.
 
-![](figures/PolyglotSolutions/Rdbms.png)
+![](media/best-practices-polyglot-solutions/Rdbms.png)
 
 **Figure 1.**
 Relational database management systems overview
@@ -23,7 +46,7 @@ Relational database management systems overview
 
 A key/value store is essentially a large hash table. You associate each data value with a unique key, and the key/value store uses this key to determine where to store the data in the database by using an appropriate hashing function. The hashing function is selected to provide an even distribution of hashed keys across data storage. The values deposited in a key/value store are opaque to the storage system software - any schema information has to be provided and interpreted by the application storing or retrieving data. Essentially, values are BLOBs and the key/value store simply retrieves or stores a value by using the key provided by the application. Figure 2 illustrates a simplified conceptual view of a key/value store.
 
-![](figures/PolyglotSolutions/KeyValueStoreConceptualStructure.png)
+![](media/best-practices-polyglot-solutions/KeyValueStoreConceptualStructure.png)
 
 **Figure 2.**
 Conceptual structure of a key/value store
@@ -32,7 +55,7 @@ Most key/value stores only support simple query, insert, and delete operations. 
 
 An application can store whatever data it likes as a set of values, although some key/value stores impose limits on the maximum size of values. In most implementations, reading or writing a single value is an atomic operation (if the value is large, writing may take some time). Key/value stores are highly optimized for applications performing simple lookups (based on the key), but are less suitable for creating systems that need to search for data based on non-key values, or that need to query data held across different key/value stores. A single key/value store can be extremely scalable; the underlying storage system software can easily distribute data across multiple devices located on separate machines.
 
-![](figures/PolyglotSolutions/KeyValueStore.png)
+![](media/best-practices-polyglot-solutions/KeyValueStore.png)
 
 **Figure 3.**
 Key/value stores overview
@@ -44,7 +67,7 @@ A typical document contains the entire data for an entity. The items that consti
 
 Figure 4 depicts the structure of a couple documents holding information about sales orders in a document database.
 
-![](figures/PolyglotSolutions/DocumentDatabaseSalesOrder.png)
+![](media/best-practices-polyglot-solutions/DocumentDatabaseSalesOrder.png)
 
 **Figure 4.**
 Sales order documents in a document database
@@ -53,7 +76,7 @@ An application can query documents by using the document key. This is a unique i
 
 You can also retrieve documents based on the value of one or more fields in a document. Some document databases support indexing to facilitate fast lookup of documents based on one or more indexed fields. Additionally, many document databases support in-place updates, enabling an application to modify the values of specific fields in a document without rewriting the entire document. Read and write operations over multiple fields in a single document are usually atomic.
 
-![](figures/PolyglotSolutions/DocumentDatabase.png)
+![](media/best-practices-polyglot-solutions/DocumentDatabase.png)
 
 **Figure 5.**
 Document databases overview
@@ -62,7 +85,7 @@ Document databases overview
 
 A column-family database organizes its data into rows and columns, and in its simplest form a column-family database can appear very similar to a relational database, at least conceptually. However, the real power of a column-family database lies in its denormalized approach to structuring sparse data. You can think of a column-family database as holding tabular data comprising rows and columns, but you can divide the columns into groups known as column-families. Each column-family holds a set of columns that are logically related together and that are typically retrieved or manipulated as a unit. Other data that is accessed separately can be stored in separate column families. Figure 6 shows an example taken from a stock-broking system. Information about customers and the stocks that they own are stored in different column families. The fields in the customer Identity column family are self-explanatory, but the fields in the Portfolio column family are the tickers for each stock that the customer holds together with the volume held. The data for a single entity (a customer) that spans multiple column-families has the same row key in each column-family. This structure highlights an important benefit of the column-family approach; the rows for any given object in a column-family can vary dynamically, making this form of data store highly suited for storing structured, volatile data.
 
-![](figures/PolyglotSolutions/CustomerAndPortfolioSeparated.png)
+![](media/best-practices-polyglot-solutions/CustomerAndPortfolioSeparated.png)
 
 **Figure 6.**
 Customer and portfolio information held as separate column-families in a column-family database
@@ -71,7 +94,7 @@ Unlike a key/value store or a document database, most column-family databases st
 
 In a column-family database, read and write operations for the part of a row in a single column-family are usually atomic, although some implementations provide atomicity across the entire row (spanning multiple column-families) as well.
 
-![](figures/PolyglotSolutions/ColumnFamilyDatabase.png)
+![](media/best-practices-polyglot-solutions/ColumnFamilyDatabase.png)
 
 **Figure 7.**
 Column-family databases overview
@@ -84,14 +107,14 @@ A graph database stores two types of information; nodes that you can think of as
 
 The purpose of a graph database is to enable an application to efficiently perform queries that traverse the network of nodes and edges, and to analyze the relationships between entities. Figure 8 shows an organization's personnel database structured as a graph. The entities are the employees and the departments in the organization, and the edges indicate reporting lines and the department in which employees work. In this graph, the arrows on the edges show the direction of the relationships.
 
-![](figures/PolyglotSolutions/GraphDatabaseDepartmentEmployee.png)
+![](media/best-practices-polyglot-solutions/GraphDatabaseDepartmentEmployee.png)
 
 **Figure 8.**
 Department and employee information in a graph database
 
 A structure such as this makes it straightforward to conduct inquiries such as "Find all employees who directly or indirectly work for Sarah" or "Who works in the same department as John?" For large graphs with lots of entities and relationships, you can perform very complex analyses very quickly, and many graph databases provide a query language that you can use to traverse a network of relationships efficiently.
 
-![](figures/PolyglotSolutions/GraphDatabase.png)
+![](media/best-practices-polyglot-solutions/GraphDatabase.png)
 
 **Figure 9.**
 Graph databases overview
@@ -100,7 +123,7 @@ Graph databases overview
 
 A parallel data warehouse (PDW) provides a massively parallel solution for ingesting, storing, and analyzing data; the data is distributed across multiple servers using a share-nothing architecture to maximize scalability and minimize dependencies. This data is unlikely to be static, so a PDW needs to be capable of handling large quantities of information arriving in a variety of formats from multiple streams at the same time as processing queries.
 
-![](figures/PolyglotSolutions/ParallelDataWarehouse.png)
+![](media/best-practices-polyglot-solutions/ParallelDataWarehouse.png)
 
 **Figure 10.**
 Parallel data warehouses overview
@@ -113,7 +136,7 @@ The key characteristics of a search engine database are the ability to store and
 
 Searching can be exact (find all documents that exactly match a given set of terms) or fuzzy (find documents that match a given set of terms and calculate how closely they match).  The database engine may also include logic that can perform linguistic analysis to return matches based on synonyms, genre expansions, and stemming. For example, the text "The sky is blue over the English Queen and her corgis" could be matched against the more poetic phrase "The firmament is a deep azure over the British monarch and her pets".
 
-![](figures/PolyglotSolutions/SearchEngineDatabase.png)
+![](media/best-practices-polyglot-solutions/SearchEngineDatabase.png)
 
 **Figure 11.**
 Search engine databases overview
@@ -122,7 +145,7 @@ Search engine databases overview
 
 In some circumstances, using simple flat files can be the most effective means of storing and retrieving information. Using file shares enables files to be accessed across a network. Given appropriate security and concurrent access control mechanisms, sharing data in this way can enable distributed services to provide highly scalable data access for performing basic, low-level operations such as simple read and write requests.
 
-![](figures/PolyglotSolutions/Other.png)
+![](media/best-practices-polyglot-solutions/Other.png)
 
 **Figure 12.**
 Other persistence approaches

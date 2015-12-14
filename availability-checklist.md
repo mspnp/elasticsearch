@@ -1,3 +1,26 @@
+<properties
+   pageTitle="Availability checklist | Microsoft Azure"
+   description="Checklist that provides guidance for availability concerns during design."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="na"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="04/28/2015"
+   ms.author="masashin"/>
+   
+<mspnp
+  file.name="best-practices-availability-checklist"
+  publish="true"/>
+  
 ![](http://pnp.azurewebsites.net/images/pnp-logo.png)
 
 # Availability checklist

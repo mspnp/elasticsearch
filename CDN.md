@@ -1,3 +1,26 @@
+<properties
+   pageTitle="Content Delivery Network (CDN) guidance | Microsoft Azure"
+   description="Guidance on Content Delivery Network (CDN) to deliver high bandwidth content hosted in Azure."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="na"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="04/28/2015"
+   ms.author="masashin"/>
+
+<mspnp
+  file.name="best-practices-cdn"
+  publish="true"/>
+  
 ![](http://pnp.azurewebsites.net/images/pnp-logo.png)
 
 # Content Delivery Network (CDN) guidance
@@ -30,7 +53,7 @@ You can also use the CDN as a cache for serving dynamic content, such as a PDF r
 
 The major advantages of using the CDN are lower latency and faster delivery of content to users irrespective of their geographical location in relation to the datacenter where the application is hosted.
 
-![](figures/CDN/CDN.png)
+![](media/best-practices-cdn/CDN.png)
 
 Using the CDN should also help to reduce the load on on application because it is relieved of the processing required to access and deliver the content. This reduction in load can help to increase the performance and scalability of the application, as well as minimizing hosting costs by reducing the processing resources required to achieve a specific level of performance and availability.
 

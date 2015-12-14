@@ -1,3 +1,26 @@
+<properties
+   pageTitle="Data partitioning guidance | Microsoft Azure"
+   description="Guidance upon how to separate partitions to be managed and accessed separately."
+   services=""
+   documentationCenter="na"
+   authors="dragon119"
+   manager="masimms"
+   editor=""
+   tags=""/>
+
+<tags
+   ms.service="best-practice"
+   ms.devlang="na"
+   ms.topic="article"
+   ms.tgt_pltfrm="na"
+   ms.workload="na"
+   ms.date="04/28/2015"
+   ms.author="masashin"/>
+   
+<mspnp
+  file.name="best-practices-data-partitioning"
+  publish="true"/>
+  
 ![](http://pnp.azurewebsites.net/images/pnp-logo.png)
 
 # Data partitioning guidance
@@ -42,7 +65,7 @@ However, the differing requirements of each strategy can raise a number of confl
 ### Horizontal partitioning (sharding)
 Figure 1 shows an overview of horizontal partitioning or sharding. In this example, product inventory data is divided into shards based on the product key. Each shard holds the data for a contiguous range of shard keys (A-G and H-Z), organized alphabetically.
 
-![](figures/DataPartitioning/DataPartitioning01.png)
+![](media/best-practices-data-partitioning/DataPartitioning01.png)
 
 _Figure 1. - Horizontally partitioning (sharding) data based on a partition key_
 
@@ -59,7 +82,7 @@ The sharding key you choose should minimize any future requirements to split lar
 ### Vertical partitioning
 The most common use for vertical partitioning is to reduce the I/O and performance costs associated with fetching the items that are accessed most frequently. Figure 2 shows an overview of an example of vertical partitioning, where different properties for each data item are held in different partitions; the name, description, and price information for products are accessed more frequently than the volume in stock or the last ordered date.
 
-![](figures/DataPartitioning/DataPartitioning02.png)
+![](media/best-practices-data-partitioning/DataPartitioning02.png)
 
 _Figure 2. - Vertically partitioning data by its pattern of use_
 
@@ -74,7 +97,7 @@ Vertical partitioning can also reduce the amount of concurrent access required t
 ### Functional partitioning
 For systems where it is possible to identify a bounded context for each distinct business area or service in the application, functional partitioning provides a technique for improving isolation and data access performance. Another common use of functional partitioning is to separate read-write data from read-only data used for reporting purposes. Figure 3 shows an overview of functional partitioning where inventory data is separated from customer data.
 
-![](figures/DataPartitioning/DataPartitioning03.png)
+![](media/best-practices-data-partitioning/DataPartitioning03.png)
 
 _Figure 3. - Functionally partitioning data by bounded context or subdomain_
 
@@ -168,19 +191,19 @@ Elastic Scale provides two schemes for mapping data to shardlets and storing the
 
 - A List Shard Map describes an association between single key and a shardlet. For example, in a multi-tenant system, the data for each tenant could be associated with a unique key and stored in its own shardlet. To guarantee privacy and isolation (to prevent one tenant from exhausting the data storage resources available to others), each shardlet could be held within its own shard.
 
-![](figures/DataPartitioning/PointShardlet.png)
+![](media/best-practices-data-partitioning/PointShardlet.png)
 
 _Figure 4. - Using a list shard map to store tenant data in separate shards_
 
 - A Range Shard Map describes an association between a set of contiguous key values and a shardlet. In the multi-tenant example described previously, as an alternative to implementing dedicated shardlets, you could group the data for a set of tenants (each with their own key) within the same shardlet. This scheme is less expensive than the first (tenants share data storage resources), but at the risk of reduced data privacy and isolation.
 
-![](figures/DataPartitioning/RangeShardlet.png)
+![](media/best-practices-data-partitioning/RangeShardlet.png)
 
 _Figure 5. - Using a range shard map to store data for a range of tenants in a shard_
 
 Note that a single shard can contain the data for several shardlets. For example, you could use list shardlets to store data for different non-contiguous tenants in the same shard. You can also mix range shardlets and list shardlets in the same shard, although they will be addressed through different maps in the global shard-map manager database (the global shard-map manager database can contain multiple shard maps). Figure 6 depicts this approach.
 
-![](figures/DataPartitioning/MultipleShardMaps.png)
+![](media/best-practices-data-partitioning/MultipleShardMaps.png)
 
 _Figure 6. - Implementing multiple shard maps_
 
@@ -224,7 +247,7 @@ The remainder of the data for an entity consists of application-defined fields. 
 
 Figure 7 shows the logical structure of an example storage account (Contoso Data) for a fictitious ecommerce application. The storage accounts contains three tables (Customer Info, Product Info, and Order Info), and each table has multiple partitions. In the Customer Info table the data is partitioned according to the city in which the customer is located, and the row key contains the customer ID. In the Product Info table the products are partitioned by product category and the row key contains the product number. In the Order Info table the orders are partitioned by the date on which they were placed and the row key specified the time the order was received. Note that all data is ordered by the row key in each partition.
 
-![](figures/DataPartitioning/TableStorage.png)
+![](media/best-practices-data-partitioning/TableStorage.png)
 
 _Figure 7. - The tables and partitions in an example storage account_
 
@@ -300,13 +323,13 @@ Each DocumentDB account has a quota that limits the number of databases and coll
 
 Figure 8 illustrates the high-level structure of the DocumentDB architecture.
 
-![](figures/DataPartitioning/DocumentDBStructure.png)
+![](media/best-practices-data-partitioning/DocumentDBStructure.png)
 
 _Figure 8. - The structure of DocumentDB_
 
 It is the responsibility of the client application to direct requests to the appropriate shard, usually by implementing its own mapping mechanism based on some attributes of the data that define the shard key. Figure 9 shows two DocumentDB databases, each containing two collections acting as shards. The data is sharded by tenant ID and contains the data for a specific tenant. The databases are created in separate DocumenDB accounts which are located in the same region as the tenants whose data they contain. The routing logic in the client application uses the tenant ID as the shard key.
 
-![](figures/DataPartitioning/DocumentDBPartitions.png)
+![](media/best-practices-data-partitioning/DocumentDBPartitions.png)
 
 _Figure 9. - Implementing sharding using Azure DocumentDB_
 
@@ -351,7 +374,7 @@ You should consider the following points when deciding how to partition data wit
 - Azure Redis Cache is not intended to act as a permanent data store, so whatever partitioning scheme you implement your application code should be prepared to accept that the data is not found in the cache and has to be retrieved from elsewhere.
 - Keep data that is frequently accessed together in the same partition. Redis is a powerful key/value store that provides several highly-optimized mechanisms for structuring data, ranging from simple strings (actually, binary data up to 512MB in length) to aggregate types such as lists (that can act as queues and stacks), sets (ordered and unordered), and hashes (that can group related fields together, such as the items that represent the fields in an object). The aggregate types enable you to associate many related values with the same key; a Redis key identifies a list, set, or hash rather than the data items that it contains. These types are all available with Azure Redis Cache and are described by the [Data Types](http://redis.io/topics/data-types) page on the Redis website. For example, in part of an ecommerce system that tracks the orders placed by customers, the details of each customer could be stored in a Redis hash keyed by using the customer ID. Each hash could hold a collection of order IDs for the customer. A separate Redis set could hold the orders, again structured as hashes, keyed by using the order ID.  Figure 10 shows this structure. Note that Redis does not implement any form of referential integrity, so it is the developer's responsibility to maintain the relationships between customers and orders.
 
-![](figures/DataPartitioning/RedisCustomersandOrders.png)
+![](media/best-practices-data-partitioning/RedisCustomersandOrders.png)
 
 _Figure 10. - Suggested structure in Redis storage for recording customer orders and their details_
 
