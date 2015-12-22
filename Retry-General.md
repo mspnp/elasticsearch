@@ -88,7 +88,7 @@ The following guidelines will help you to design a suitable transient fault hand
 # More information
 
 * [Azure service-specific retry guidelines](https://github.com/mspnp/azure-guidance/blob/master/Retry-Service-Specific.md)
-* [The Transient Fault Handling Application Block](http://msdn.microsoft.com/en-us/library/hh680934.aspx)
+* [The Transient Fault Handling Application Block](https://msdn.microsoft.com/en-us/library/hh675232.aspx)
 * [Circuit Breaker Pattern](http://msdn.microsoft.com/en-us/library/dn589784.aspx)
 * [Compensating Transaction Pattern](http://msdn.microsoft.com/en-us/library/dn589804.aspx)
 * [Idempotency Patterns](http://blog.jonathanoliver.com/2010/04/idempotency-patterns/)
