@@ -1,0 +1,4 @@
+results/
+jmeter.log
+jmeter/tests/*/.metadata/
+jmeter/tests/*/target/

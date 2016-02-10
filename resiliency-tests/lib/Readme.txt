@@ -1,0 +1,1 @@
+Download http://the.earth.li/~sgtatham/putty/latest/x86/plink.exe and place it here.

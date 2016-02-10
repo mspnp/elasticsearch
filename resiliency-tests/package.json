@@ -1,0 +1,21 @@
+{
+  "name": "mspnp-elastic-resilience-tests",
+  "version": "0.0.1",
+  "description": "Microsoft P&P Elasticsearch Resilience Tests",
+  "main": "app.js",
+  "author": {
+    "name": "Microsoft",
+    "email": ""
+  },
+  "dependencies": {
+    "async": "^1.5.0",
+    "colors": "^1.1.2",
+    "commander": "^2.9.0",
+    "dateformat": "^1.0.11",
+    "lodash": "^3.10.1",
+    "mkdirp": "^0.5.1",
+    "prompt": "^0.2.14",
+    "request": "^2.65.0",
+    "scp2": "^0.2.2"
+  }
+}
