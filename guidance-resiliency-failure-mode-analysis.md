@@ -39,7 +39,7 @@ As a starting point for your FMA process, this article contains a catalog of pot
     - Use [queue-based load leveling][queue-based-load-leveling] to buffer requests and process them at appropriate pace.
     - Prioritize certain clients. For example, if the application has have free and paid tiers, throttle customers on the free tier, but not paid customers. See [Priority queue pattern][priority-queue-pattern].
 
-**Diagnostics**. Use [App Service diagnostic logging][app-service-logging].
+**Diagnostics**. Use [App Service diagnostic logging][app-service-logging]. Use Azure Log Analytics, App Insights or New Relic to help understand the diagnostic logs.
 
 
 ### One of the operations in a workflow or distributed transaction fails.
