@@ -2,7 +2,7 @@
 
 Failure mode analysis (FMA) is a process for building resiliency into a system, by identifying possible failure points in the system. The FMA should be part of the architecture and design phases, so that you can build failure recovery into the system from the beginning.
 
-Here is the general process to conduct an MFA: 
+Here is the general process to conduct an FMA: 
 
 1. Identify all of the components in the system. Include external dependencies, such as as identity providers, third-party services, and so on.   
 
@@ -25,7 +25,7 @@ As a starting point for your FMA process, this article contains a catalog of pot
 
 **Detection**. Depends on the application. Typical symptoms:
 
-- The website starts returning 500 errors.
+- The website starts returning HTTP 500 error codes.
 - Dependent services, such as database or storage, start to throttle requests.
 - HTTP queue length grows.
 
@@ -36,8 +36,8 @@ As a starting point for your FMA process, this article contains a catalog of pot
 - Mitigate failures to avoid having cascading failures disrupt the entire application. Mitigation strategies include:
 
     - Implement the [Throttling Pattern][throttling-pattern] to avoid overwhelming backend systems.
-    - Use [queue-based load leveling][queue-based-load-leveling] to buffer requests and process them at appropriate pace.
-    - Prioritize certain clients. For example, if the application has have free and paid tiers, throttle customers on the free tier, but not paid customers. See [Priority queue pattern][priority-queue-pattern].
+    - Use [queue-based load leveling][queue-based-load-leveling] to buffer requests and process them at an appropriate pace.
+    - Prioritize certain clients. For example, if the application has free and paid tiers, throttle customers on the free tier, but not paid customers. See [Priority queue pattern][priority-queue-pattern].
 
 **Diagnostics**. Use [App Service diagnostic logging][app-service-logging].
 
@@ -160,7 +160,7 @@ Use multiple [deployment slots][app-service-slots] and roll back to the last-kno
 
 ## Azure Search
 
-### Writing data to AzureSearch fails.
+### Writing data to Azure Search fails.
 
 **Detection**. Catch `Microsoft.Rest.Azure.CloudException` errors.
 
